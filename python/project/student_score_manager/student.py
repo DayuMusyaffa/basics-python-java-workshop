@@ -11,32 +11,50 @@ class Student:
     # ---------- score ops ----------
     def add_score(self, value: float) -> None:
         self._validate_score(value)
-        # TODO: implement penambahan score
+        self.scores.append(value)
+        # TODO:[DONE] implement penambahan score
 
     def edit_score(self, index: int, new_value: float) -> None:
         if index < 0 or index >= len(self.scores):
             raise IndexError("Index nilai tidak valid")
         self._validate_score(new_value)
-        # TODO: edit score dengan specific index
+        self.scores[index] = new_value
+        # TODO:[DONE] edit score dengan specific index
 
     def remove_score(self, index: int) -> None:
         if index < 0 or index >= len(self.scores):
             raise IndexError("Index nilai tidak valid")
-        # TODO: hapus score dengan specific index
+        del self.scores[index]
+        # TODO: [DONE] hapus score dengan specific index
 
     # ---------- derived metrics ----------
     def average(self) -> float:
-        # TODO: hitung rata-rata score, kembalikan 0.0 jika tidak ada score
+        # TODO: hitung rata-rata score, kembalikan 0.0 jika tidak ada score[DONE]
         return sum(self.scores) / len(self.scores) if self.scores else 0.0
 
     def grade(self) -> str:
         avg = self.average()
-        # TODO: kembalikan grade berdasarkan kondisi average
-        return "E"
+        """Mengembalikan huruf grade berdasarkan nilai rata-rata"""
+        if avg >= 85:
+            return "A"
+        elif avg >= 70:
+            return "B"
+        elif avg >= 55:
+            return "C"
+        elif avg >= 40:
+            return "D"
+        else:
+            return "E"
+        # TODO:[DONE] kembalikan grade berdasarkan kondisi average
 
     # ---------- utils ----------
-    # TODO: buat fungsi infoLine() yang return string dengan format:
-    # Nama | scores=[..] | avg=.. | grade=..
+    # TODO: [DONE] buat fungsi infoLine() yang return string dengan format:
+    def info_line(self) -> str:
+        """Mengembalikan string ringkas data mahasiswa"""
+        scores_str = ", ".join(f"{s:.1f}" for s in self.scores) if self.scores else "-"
+        avg_str = f"{self.average():.2f}"
+        grade_str = self.grade()
+        return f"{self.name} | scores=[{scores_str}] | avg={avg_str} | grade={grade_str}"
 
     def to_dict(self) -> Dict:
         return {"name": self.name, "scores": self.scores}

@@ -84,7 +84,18 @@ class StudentManager:
             return
 
         s = Student(name)
-        # TODO: implement penambahan mahasiswa
+        # TODO: implement penambahan mahasiswa [DONE]
+        print("Tambahkan nilai (kosongkan jika selesai):")
+        while True:
+            raw = input("Masukkan nilai (0-100): ").strip()
+            if not raw:
+                break
+            try:
+                s.add_score(self._parse_score(raw))
+            except Exception as e:
+                print(f"⚠️ {e}")
+        self.students.append(s)
+        print(f"✅ Mahasiswa '{name}' ditambahkan.")
         # Hint: gunakan loop untuk input banyak score dari user, pakai method _parse_score() dan add_score(), lalu tambahkan ke students List
         print("✅ Mahasiswa ditambahkan.")
 
@@ -93,16 +104,29 @@ class StudentManager:
             print("Belum ada data.")
             return
         print("\n== Daftar Mahasiswa ==")
-
-        # TODO: implementasi penampilan daftar mahasiswa beserta info singkatnya dengan memanggil method infoLine()
+        for i, s in enumerate(self.students, 1):
+            print(f"{i}. {s.info_line()}")
+        # TODO: [DONE] implementasi penampilan daftar mahasiswa beserta info singkatnya dengan memanggil method infoLine()
 
     def add_score_to_student(self) -> None:
-        # TODO: implement penambahan score ke mahasiswa
+        name = input("Nama mahasiswa: ").strip()
+        s = self._find_by_name(name)
+        if not s:
+            print("Mahasiswa tidak ditemukan.")
+            return
+        raw = input("Masukkan nilai baru (0-100): ").strip()
+        try:
+            val = self._parse_score(raw)
+            s.add_score(val)
+            print("✅ Nilai berhasil ditambahkan.")
+        except Exception as e:
+            print(f"⚠️ {e}")
+        # TODO: implement penambahan score ke mahasiswa [DONE]
         # Hint: minta input nama mahasiswa, cari dengan _find_by_name(), lalu minta input score baru dan tambahkan
-        print("✅ Nilai ditambahkan.")
+        
 
     def edit_student_score(self) -> None:
-        # TODO: implement edit score mahasiswa
+        # TODO: implement edit score mahasiswa [DONE]
         name = input("Nama mahasiswa: ").strip()
         s = self._find_by_name(name)
         if not s:
@@ -125,12 +149,42 @@ class StudentManager:
         print("✅ Nilai diperbarui.")
 
     def delete_student_score(self) -> None:
-        # TODO: implement hapus score mahasiswa
-        print("🗑️ Nilai dihapus.")
+        # TODO: implement hapus score mahasiswa[DONE]
+        name = input("Nama mahasiswa: ").strip()
+        s = self._find_by_name(name)
+        if not s:
+            print("Mahasiswa tidak ditemukan.")
+            return
+        if not s.scores:
+            print("Mahasiswa belum memiliki nilai.")
+            return
+
+        print(f"Nilai saat ini: {s.scores}")
+        try:
+            idx = int(input("Indeks nilai yang akan dihapus (mulai dari 1): ")) - 1
+            if 0 <= idx < len(s.scores):
+                s.delete_score(idx)
+                print("🗑️ Nilai dihapus.")
+            else:
+                print("Indeks tidak valid.")
+        except ValueError:
+            print("Masukkan angka yang valid.")
+        
 
     def edit_student_name(self) -> None:
-        # TODO: implement edit nama mahasiswa
+        name = input("Nama mahasiswa yang ingin diubah: ").strip()
+        s = self._find_by_name(name)
+        if not s:
+            print("Mahasiswa tidak ditemukan.")
+            return
+        new_name = input("Masukkan nama baru: ").strip()
+        if not new_name:
+            print("Nama baru tidak boleh kosong.")
+            return
+        s.name = new_name
         print("✅ Nama mahasiswa diperbarui.")
+        # TODO: implement edit nama mahasiswa[DONE]
+        
 
     def delete_student(self) -> None:
         name = input("Nama mahasiswa yang dihapus: ").strip()
